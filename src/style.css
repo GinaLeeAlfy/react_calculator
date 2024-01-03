@@ -1,6 +1,8 @@
 :root {
   --white: #ffffff;
   --black: #232535;
+  --gray: #e2ebed;
+  --dark-gray: #77919d;
   --green: #12eb24;
   --dark-green: #1e7525;
   --transparent: transparent;
@@ -11,11 +13,89 @@
   margin: 0;
 }
 
-body {
+html {
+  font-size: 24px;
   background-color: var(--black);
   color: var(--white);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  width: 100svw;
+  height: 100svh;
   display: flex;
   justify-content: center;
-  font-size: 16px;
+}
+
+#root {
+  width: 100%;
+  max-width: 600px;
+}
+
+.container {
+  display: grid;
+  grid-template-rows: 3fr 7fr;
+}
+
+.screen {
+  background-color: var(--dark-gray);
+  border: 1px solid var(--black);
+  border-bottom: none;
+  text-align: end;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  padding: 0.5rem;
+  padding-bottom: 0;
+}
+
+.buttons {
+  display: grid;
+  gap: 2px;
+}
+
+.row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.row:last-of-type {
+  grid-template-columns: 2fr 1fr 1fr;
+}
+
+button {
+  border: 1px solid var(--black);
+  border-top: none;
+  border-bottom: none;
+  background-color: var(--white);
+  color: var(--dark-gray);
+  cursor: pointer;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.row:first-of-type button {
+  background-color: var(--gray);
+}
+
+.row button:last-of-type {
+  background-color: var(--gray);
+}
+
+button:hover,
+.row:first-of-type button:hover,
+.row button:last-of-type:hover {
+  background-color: var(--green);
+  color: var(--black);
+}
+
+svg {
+  height: 1rem;
+  width: 1rem;
+  pointer-events: none;
+}
+
+path {
+  pointer-events: none;
 }

@@ -16,36 +16,43 @@ const App = () => {
   const [display, setDisplay] = useState("");
   const [currentAnswer, setCurrentAnswer] = useState("0");
   const [lastNumber, setLastNumber] = useState("");
-  const [operator, setOperator] = useState("");
 
+  const [isOperatorSet, setIsOperatorSet] = useState(false);
   const [isDecimal, setIsDecimal] = useState(false);
   const [isLastInputNumber, setIsLastInputNumber] = useState(true);
+  const [isCalculated, setIsCalculated] = useState(true);
 
   //handle number
   const handleNumber = (num) => {
-    if (isLastInputNumber) {
-      if (currentAnswer === "0") {
-        if (num === ".") {
-          setCurrentAnswer("0.");
-          setIsDecimal(true);
-        } else {
-          setCurrentAnswer(num);
-        }
-      } else {
-        if (num === "." && isDecimal === false) {
-          setCurrentAnswer(currentAnswer + num);
-          setIsDecimal(true);
-        } else if (num !== ".") {
-          setCurrentAnswer(currentAnswer + num);
-        }
+    if (num === ".") {
+      if (isCalculated || isOperatorSet) {
+        setCurrentAnswer("0.");
+        setIsDecimal(true);
+      } else if (!isDecimal) {
+        setCurrentAnswer(currentAnswer + num);
+        setIsDecimal(true);
       }
-      setIsLastInputNumber(true);
+    } else {
+      if (isCalculated) {
+        setCurrentAnswer(num);
+      } else {
+        setCurrentAnswer(currentAnswer + num);
+      }
     }
+    setIsLastInputNumber(true);
+    setIsCalculated(false);
   };
   //handle operator
-
+  const handleOperator = (operator) => {
+    // setOperator(operator);
+    if (isLastInputNumber && !isOperatorSet) {
+      setDisplay(`${currentAnswer} ${operator}`);
+      setLastNumber(currentAnswer);
+      setIsLastInputNumber(false);
+      setIsOperatorSet(true);
+    }
+  };
   //handle other
-
   //key listener
   document.addEventListener("keydown", (e) => {
     const key = e.key;
@@ -68,8 +75,7 @@ const App = () => {
         console.log(targetClassName);
         switch (targetClassName) {
           case "subtract":
-            setOperator("-");
-            setDisplay("-");
+            handleOperator("-");
             break;
 
           default:

@@ -61,7 +61,9 @@ const App = () => {
     if (targetTagName === "BUTTON") {
       if (targetText !== "") {
         console.log(targetText);
-        handleNumber(targetText);
+        if (!Number.isNaN(targetText)) {
+          handleNumber(targetText);
+        }
       } else {
         console.log(targetClassName);
         switch (targetClassName) {

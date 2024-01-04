@@ -33,7 +33,7 @@ const App = () => {
         setIsDecimal(true);
       }
     } else {
-      if (isCalculated) {
+      if (isCalculated || !isLastInputNumber) {
         setCurrentAnswer(num);
       } else {
         setCurrentAnswer(currentAnswer + num);
@@ -50,6 +50,13 @@ const App = () => {
       setLastNumber(currentAnswer);
       setIsLastInputNumber(false);
       setIsOperatorSet(true);
+      setIsCalculated(false);
+    } else if (!isCalculated && isOperatorSet) {
+      setDisplay(`${currentAnswer} ${operator}`);
+      setLastNumber(currentAnswer);
+      setIsLastInputNumber(false);
+      setIsOperatorSet(true);
+      setIsCalculated(false);
     }
   };
   //handle other
@@ -76,6 +83,15 @@ const App = () => {
         switch (targetClassName) {
           case "subtract":
             handleOperator("-");
+            break;
+          case "add":
+            handleOperator("+");
+            break;
+          case "divide":
+            handleOperator("/");
+            break;
+          case "multiply":
+            handleOperator("*");
             break;
 
           default:

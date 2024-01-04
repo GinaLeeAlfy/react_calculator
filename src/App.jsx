@@ -16,6 +16,8 @@ const App = () => {
   const [display, setDisplay] = useState("");
   const [currentAnswer, setCurrentAnswer] = useState("0");
   const [lastNumber, setLastNumber] = useState("");
+  const [operator, setOperator] = useState("");
+  const [operatorDisplay, setOperatorDisplay] = useState("");
 
   const [isOperatorSet, setIsOperatorSet] = useState(false);
   const [isDecimal, setIsDecimal] = useState(false);
@@ -43,23 +45,68 @@ const App = () => {
     setIsCalculated(false);
   };
   //handle operator
-  const handleOperator = (operator) => {
-    // setOperator(operator);
-    if (isLastInputNumber && !isOperatorSet) {
-      setDisplay(`${currentAnswer} ${operator}`);
+  const handleOperator = (operatorText) => {
+    setOperatorDisplay(operatorText);
+    if (lastNumber === "") {
+      console.log(operatorDisplay);
+      setDisplay(`${currentAnswer} ${operatorDisplay}`);
       setLastNumber(currentAnswer);
       setIsLastInputNumber(false);
       setIsOperatorSet(true);
       setIsCalculated(false);
-    } else if (!isCalculated && isOperatorSet) {
-      setDisplay(`${currentAnswer} ${operator}`);
-      setLastNumber(currentAnswer);
+    } else if (!isCalculated && !isLastInputNumber) {
+      setDisplay(`${lastNumber} ${operatorDisplay}`);
       setIsLastInputNumber(false);
       setIsOperatorSet(true);
       setIsCalculated(false);
+    } else if (!isCalculated && isLastInputNumber) {
+      calculateExpression();
     }
+
+    // if (isLastInputNumber && !isOperatorSet) {
+    //   setDisplay(`${currentAnswer} ${operatorDisplay}`);
+    //   setLastNumber(currentAnswer);
+    //   setIsLastInputNumber(false);
+    //   setIsOperatorSet(true);
+    //   setIsCalculated(false);
+    // } else if (!isCalculated && isOperatorSet) {
+    //   setDisplay(`${currentAnswer} ${operatorDisplay}`);
+    //   setLastNumber(currentAnswer);
+    //   setIsLastInputNumber(false);
+    //   setIsOperatorSet(true);
+    //   setIsCalculated(false);
+    // }
   };
   //handle other
+
+  //calc expression
+
+  const calculateExpression = () => {
+    let total;
+    switch (operator) {
+      case "add":
+        total = lastNumber + currentAnswer;
+        break;
+      case "subtract":
+        total = lastNumber - currentAnswer;
+        break;
+      case "divide":
+        total = lastNumber / currentAnswer;
+        break;
+      case "multiply":
+        total = lastNumber * currentAnswer;
+        break;
+      default:
+        break;
+    }
+
+    total = total.toString();
+
+    setCurrentAnswer(total);
+    setLastNumber(total);
+    setDisplay(`${lastNumber} ${operatorDisplay}`);
+  };
+
   //key listener
   document.addEventListener("keydown", (e) => {
     const key = e.key;
@@ -80,18 +127,19 @@ const App = () => {
         }
       } else {
         console.log(targetClassName);
+        setOperator(targetClassName);
         switch (targetClassName) {
           case "subtract":
-            handleOperator("-");
+            handleOperator("&minus;");
             break;
           case "add":
-            handleOperator("+");
+            handleOperator("&plus;");
             break;
           case "divide":
-            handleOperator("/");
+            handleOperator("&divide;");
             break;
           case "multiply":
-            handleOperator("*");
+            handleOperator("&times;");
             break;
 
           default:

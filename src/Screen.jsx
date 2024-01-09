@@ -1,8 +1,8 @@
-const Screen = ({ display, currentAnswer }) => {
+const Screen = ({ display, currentAnswerDisplay }) => {
   return (
     <div className="screen">
       <p>{display}</p>
-      <h1>{currentAnswer}</h1>
+      <h1>{currentAnswerDisplay}</h1>
     </div>
   );
 };

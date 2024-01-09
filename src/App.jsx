@@ -14,6 +14,7 @@ import {
 
 const App = () => {
   const [display, setDisplay] = useState("");
+  const [currentAnswerDisplay, setCurrentAnswerDisplay] = useState("0");
   const [currentAnswer, setCurrentAnswer] = useState("0");
   const [lastNumber, setLastNumber] = useState("");
   const [operator, setOperator] = useState("");
@@ -31,21 +32,26 @@ const App = () => {
     if (num === ".") {
       if (isCalculated || isOperatorSet) {
         setCurrentAnswer("0.");
+        setCurrentAnswerDisplay("0.");
         setIsDecimal(true);
       } else if (!isDecimal) {
         setCurrentAnswer(currentAnswer + num);
+        setCurrentAnswerDisplay(currentAnswer + num);
         setIsDecimal(true);
       }
     } else {
       if (isClear) {
         setCurrentAnswer(num);
+        setCurrentAnswerDisplay(num);
       } else if (isCalculated || (isOperatorSet && !isLastInputNumber)) {
         setLastNumber(currentAnswer);
         setCurrentAnswer(num);
+        setCurrentAnswerDisplay(num);
       } else if (currentAnswer === "0") {
         return;
       } else {
         setCurrentAnswer(currentAnswer + num);
+        setCurrentAnswerDisplay(currentAnswer + num);
       }
     }
     setIsLastInputNumber(true);
@@ -104,18 +110,21 @@ const App = () => {
 
     if (total === "Cannot Divide by 0") {
       setDisplay(`${lastNumber} ${operatorText}`);
+      setCurrentAnswer("0");
       setIsClearNeeded(true);
     } else {
       setLastNumber(total);
       setDisplay(`${total} ${operatorText}`);
+      setCurrentAnswer(total);
     }
-    setCurrentAnswer(total);
 
+    setCurrentAnswerDisplay(total);
     setIsCalculated(true);
   };
 
   const clearCalculator = () => {
     setDisplay("");
+    setCurrentAnswerDisplay("0");
     setCurrentAnswer("0");
     setLastNumber("");
     setOperator("");
@@ -194,7 +203,7 @@ const App = () => {
 
   return (
     <div className="container">
-      <Screen display={display} currentAnswer={currentAnswer} />
+      <Screen display={display} currentAnswerDisplay={currentAnswerDisplay} />
       <div className="buttons" onClick={grabInfo}>
         <div className="row">
           <button className="clear-entry">

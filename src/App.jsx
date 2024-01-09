@@ -19,6 +19,7 @@ const App = () => {
   const [operator, setOperator] = useState("");
   const [operatorDisplay, setOperatorDisplay] = useState("");
 
+  const [isClear, setIsClear] = useState(true);
   const [isOperatorSet, setIsOperatorSet] = useState(false);
   const [isDecimal, setIsDecimal] = useState(false);
   const [isLastInputNumber, setIsLastInputNumber] = useState(true);
@@ -35,7 +36,10 @@ const App = () => {
         setIsDecimal(true);
       }
     } else {
-      if (isCalculated || !isLastInputNumber) {
+      if (isClear) {
+        setCurrentAnswer(num);
+      } else if (isCalculated || (isOperatorSet && !isLastInputNumber)) {
+        setLastNumber(currentAnswer);
         setCurrentAnswer(num);
       } else {
         setCurrentAnswer(currentAnswer + num);
@@ -43,25 +47,30 @@ const App = () => {
     }
     setIsLastInputNumber(true);
     setIsCalculated(false);
+    setIsClear(false);
   };
   //handle operator
   const handleOperator = (operatorText) => {
     setOperatorDisplay(operatorText);
+    console.log(operatorDisplay);
     if (lastNumber === "") {
       console.log(operatorDisplay);
-      setDisplay(`${currentAnswer} ${operatorDisplay}`);
+      setDisplay(`${currentAnswer} ${operatorText}`);
       setLastNumber(currentAnswer);
-      setIsLastInputNumber(false);
-      setIsOperatorSet(true);
       setIsCalculated(false);
     } else if (!isCalculated && !isLastInputNumber) {
-      setDisplay(`${lastNumber} ${operatorDisplay}`);
-      setIsLastInputNumber(false);
-      setIsOperatorSet(true);
+      setDisplay(`${lastNumber} ${operatorText}`);
       setIsCalculated(false);
     } else if (!isCalculated && isLastInputNumber) {
-      calculateExpression();
+      calculateExpression(operatorText);
+    } else if (isCalculated) {
+      setDisplay(`${lastNumber} ${operatorText}`);
+      setIsCalculated(false);
     }
+
+    setIsLastInputNumber(false);
+    setIsOperatorSet(true);
+    setIsClear(false);
 
     // if (isLastInputNumber && !isOperatorSet) {
     //   setDisplay(`${currentAnswer} ${operatorDisplay}`);
@@ -81,13 +90,14 @@ const App = () => {
 
   //calc expression
 
-  const calculateExpression = () => {
+  const calculateExpression = (operatorText) => {
     let total;
     switch (operator) {
       case "add":
         total = lastNumber + currentAnswer;
         break;
       case "subtract":
+        console.log(lastNumber - currentAnswer);
         total = lastNumber - currentAnswer;
         break;
       case "divide":
@@ -99,12 +109,13 @@ const App = () => {
       default:
         break;
     }
-
-    total = total.toString();
+    // console.log(total);
+    // total = total.toString();
 
     setCurrentAnswer(total);
     setLastNumber(total);
-    setDisplay(`${lastNumber} ${operatorDisplay}`);
+    setDisplay(`${total} ${operatorText}`);
+    setIsCalculated(true);
   };
 
   //key listener
@@ -121,25 +132,29 @@ const App = () => {
 
     if (targetTagName === "BUTTON") {
       if (targetText !== "") {
-        console.log(targetText);
         if (!Number.isNaN(targetText)) {
           handleNumber(targetText);
         }
       } else {
-        console.log(targetClassName);
         setOperator(targetClassName);
         switch (targetClassName) {
           case "subtract":
-            handleOperator("&minus;");
+            // handleOperator("&minus;");
+            handleOperator("-");
             break;
           case "add":
-            handleOperator("&plus;");
+            // handleOperator("&plus;");
+            handleOperator("+");
+
             break;
           case "divide":
-            handleOperator("&divide;");
+            // handleOperator("&divide;");
+            handleOperator("/");
             break;
           case "multiply":
-            handleOperator("&times;");
+            // handleOperator("&times;");
+            handleOperator("*");
+
             break;
 
           default:

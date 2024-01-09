@@ -20,6 +20,7 @@ const App = () => {
   const [operator, setOperator] = useState("");
   const [operatorDisplay, setOperatorDisplay] = useState("");
 
+  const [isFinalEval, setIsFinalEval] = useState(false);
   const [isClearNeeded, setIsClearNeeded] = useState(false);
   const [isClear, setIsClear] = useState(true);
   const [isOperatorSet, setIsOperatorSet] = useState(false);
@@ -43,6 +44,11 @@ const App = () => {
       if (isClear) {
         setCurrentAnswer(num);
         setCurrentAnswerDisplay(num);
+      } else if (isFinalEval) {
+        setLastNumber("");
+        setCurrentAnswer(num);
+        setCurrentAnswerDisplay(num);
+        setDisplay("");
       } else if (isCalculated || (isOperatorSet && !isLastInputNumber)) {
         setLastNumber(currentAnswer);
         setCurrentAnswer(num);
@@ -57,6 +63,7 @@ const App = () => {
     setIsLastInputNumber(true);
     setIsCalculated(false);
     setIsClear(false);
+    setIsFinalEval(false);
   };
 
   //handle operator
@@ -70,7 +77,7 @@ const App = () => {
       setDisplay(`${lastNumber} ${operatorText}`);
       setIsCalculated(false);
     } else if (!isCalculated && isLastInputNumber) {
-      calculateExpression(operatorText);
+      calculateExpression(operatorText, false);
     } else if (isCalculated) {
       setDisplay(`${lastNumber} ${operatorText}`);
       setIsCalculated(false);
@@ -79,11 +86,12 @@ const App = () => {
     setIsLastInputNumber(false);
     setIsOperatorSet(true);
     setIsClear(false);
+    setIsFinalEval(false);
   };
 
   //calc expression
-  const calculateExpression = (operatorText) => {
-    let total;
+  const calculateExpression = (operatorText, isFinal) => {
+    let total = currentAnswer;
     switch (operator) {
       case "add":
         total = Number(lastNumber) + Number(currentAnswer);
@@ -111,10 +119,16 @@ const App = () => {
       setDisplay(`${lastNumber} ${operatorText}`);
       setCurrentAnswer("0");
       setIsClearNeeded(true);
-    } else {
+    } else if (!isFinal) {
       setLastNumber(total);
       setDisplay(`${total} ${operatorText}`);
       setCurrentAnswer(total);
+    } else {
+      setDisplay(`${lastNumber} ${operatorText} ${currentAnswer} =`);
+      setLastNumber("");
+      setCurrentAnswer(total);
+      setIsOperatorSet(false);
+      setOperator("");
     }
 
     setCurrentAnswerDisplay(total);
@@ -129,6 +143,7 @@ const App = () => {
     setOperator("");
     setOperatorDisplay("");
 
+    setIsFinalEval(false);
     setIsClearNeeded(false);
     setIsClear(true);
     setIsOperatorSet(false);
@@ -172,12 +187,12 @@ const App = () => {
           case "divide":
             setOperator(targetClassName);
             // handleOperator("&divide;");
-            handleOperator("/");
+            handleOperator("÷");
             break;
           case "multiply":
             setOperator(targetClassName);
             // handleOperator("&times;");
-            handleOperator("*");
+            handleOperator("x");
             break;
           case "back":
             if (isCalculated) {
@@ -205,7 +220,8 @@ const App = () => {
             setIsClear(true);
             break;
           case "equals":
-            calculateExpression(operatorDisplay);
+            setIsFinalEval(true);
+            calculateExpression(operatorDisplay, true);
             break;
 
           default:

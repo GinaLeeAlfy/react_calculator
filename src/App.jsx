@@ -58,6 +58,7 @@ const App = () => {
     setIsCalculated(false);
     setIsClear(false);
   };
+
   //handle operator
   const handleOperator = (operatorText) => {
     setOperatorDisplay(operatorText);
@@ -79,10 +80,8 @@ const App = () => {
     setIsOperatorSet(true);
     setIsClear(false);
   };
-  //handle other
-  const handleOther = (action) => {};
-  //calc expression
 
+  //calc expression
   const calculateExpression = (operatorText) => {
     let total;
     switch (operator) {
@@ -181,14 +180,29 @@ const App = () => {
             handleOperator("*");
             break;
           case "back":
-            handleOther(targetClassName);
+            if (isCalculated) {
+              return;
+            } else if (currentAnswer.length > 1) {
+              if (currentAnswer.indexOf(".") === currentAnswer.length - 1) {
+                setIsDecimal(false);
+              }
+              setCurrentAnswer(currentAnswer.slice(0, -1));
+              setCurrentAnswerDisplay(currentAnswer.slice(0, -1));
+            } else {
+              setCurrentAnswer("0");
+              setCurrentAnswerDisplay("0");
+              setIsDecimal(false);
+              setIsClear(true);
+            }
             break;
           case "clear":
-            console.log("anything");
             clearCalculator();
             break;
           case "clear-entry":
-            handleOther(targetClassName);
+            setCurrentAnswer("0");
+            setCurrentAnswerDisplay("0");
+            setIsDecimal(false);
+            setIsClear(true);
             break;
           case "equals":
             calculateExpression(operatorDisplay);

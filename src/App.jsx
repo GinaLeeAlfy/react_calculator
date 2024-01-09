@@ -19,6 +19,7 @@ const App = () => {
   const [operator, setOperator] = useState("");
   const [operatorDisplay, setOperatorDisplay] = useState("");
 
+  const [isClearNeeded, setIsClearNeeded] = useState(false);
   const [isClear, setIsClear] = useState(true);
   const [isOperatorSet, setIsOperatorSet] = useState(false);
   const [isDecimal, setIsDecimal] = useState(false);
@@ -41,6 +42,8 @@ const App = () => {
       } else if (isCalculated || (isOperatorSet && !isLastInputNumber)) {
         setLastNumber(currentAnswer);
         setCurrentAnswer(num);
+      } else if (currentAnswer === "0") {
+        return;
       } else {
         setCurrentAnswer(currentAnswer + num);
       }
@@ -52,9 +55,7 @@ const App = () => {
   //handle operator
   const handleOperator = (operatorText) => {
     setOperatorDisplay(operatorText);
-    console.log(operatorDisplay);
     if (lastNumber === "") {
-      console.log(operatorDisplay);
       setDisplay(`${currentAnswer} ${operatorText}`);
       setLastNumber(currentAnswer);
       setIsCalculated(false);
@@ -71,50 +72,59 @@ const App = () => {
     setIsLastInputNumber(false);
     setIsOperatorSet(true);
     setIsClear(false);
-
-    // if (isLastInputNumber && !isOperatorSet) {
-    //   setDisplay(`${currentAnswer} ${operatorDisplay}`);
-    //   setLastNumber(currentAnswer);
-    //   setIsLastInputNumber(false);
-    //   setIsOperatorSet(true);
-    //   setIsCalculated(false);
-    // } else if (!isCalculated && isOperatorSet) {
-    //   setDisplay(`${currentAnswer} ${operatorDisplay}`);
-    //   setLastNumber(currentAnswer);
-    //   setIsLastInputNumber(false);
-    //   setIsOperatorSet(true);
-    //   setIsCalculated(false);
-    // }
   };
   //handle other
-
+  const handleOther = (action) => {};
   //calc expression
 
   const calculateExpression = (operatorText) => {
     let total;
     switch (operator) {
       case "add":
-        total = lastNumber + currentAnswer;
+        total = Number(lastNumber) + Number(currentAnswer);
         break;
       case "subtract":
-        console.log(lastNumber - currentAnswer);
-        total = lastNumber - currentAnswer;
+        total = Number(lastNumber) - Number(currentAnswer);
         break;
       case "divide":
-        total = lastNumber / currentAnswer;
+        if (currentAnswer === "0") {
+          total = "Cannot Divide by 0";
+          clearCalculator();
+        } else {
+          total = Number(lastNumber) / Number(currentAnswer);
+        }
         break;
       case "multiply":
-        total = lastNumber * currentAnswer;
+        total = Number(lastNumber) * Number(currentAnswer);
         break;
       default:
         break;
     }
-    // console.log(total);
-    // total = total.toString();
+    total = total.toString();
+
+    if (total === "Cannot Divide by 0") {
+      setDisplay(`${lastNumber} ${operatorText}`);
+    } else {
+      setLastNumber(total);
+      setDisplay(`${total} ${operatorText}`);
+    }
 
     setCurrentAnswer(total);
-    setLastNumber(total);
-    setDisplay(`${total} ${operatorText}`);
+    setIsCalculated(true);
+  };
+
+  const clearCalculator = () => {
+    setDisplay("");
+    setCurrentAnswer("0");
+    setLastNumber("");
+    setOperator("");
+    setOperatorDisplay("");
+
+    setIsClearNeeded(false);
+    setIsClear(true);
+    setIsOperatorSet(false);
+    setIsDecimal(false);
+    setIsLastInputNumber(true);
     setIsCalculated(true);
   };
 
@@ -136,25 +146,38 @@ const App = () => {
           handleNumber(targetText);
         }
       } else {
-        setOperator(targetClassName);
         switch (targetClassName) {
           case "subtract":
+            setOperator(targetClassName);
             // handleOperator("&minus;");
             handleOperator("-");
             break;
           case "add":
+            setOperator(targetClassName);
             // handleOperator("&plus;");
             handleOperator("+");
-
             break;
           case "divide":
+            setOperator(targetClassName);
             // handleOperator("&divide;");
             handleOperator("/");
             break;
           case "multiply":
+            setOperator(targetClassName);
             // handleOperator("&times;");
             handleOperator("*");
-
+            break;
+          case "back":
+            handleOther(targetClassName);
+            break;
+          case "clear":
+            handleOther(targetClassName);
+            break;
+          case "clear-entry":
+            handleOther(targetClassName);
+            break;
+          case "equals":
+            calculateExpression(operatorDisplay);
             break;
 
           default:

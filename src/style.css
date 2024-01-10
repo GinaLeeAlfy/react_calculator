@@ -29,16 +29,12 @@ body {
 
 #root {
   width: 100%;
-  max-width: 600px;
+  max-width: 800px;
 }
 
 .container {
-  display: grid;
-  grid-template-rows: 3fr 7fr;
-  grid-template-columns: 7fr 3fr;
-  grid-template-areas:
-    "display history"
-    "buttons history";
+  display: flex;
+  flex-direction: column;
 }
 
 .history {
@@ -49,6 +45,8 @@ body {
   background-color: var(--white);
   color: var(--black);
   align-items: end;
+  overflow: scroll;
+  flex-grow: 3;
 }
 
 .flex-col {
@@ -89,6 +87,8 @@ body {
   justify-content: end;
   padding: 0.5rem;
   padding-bottom: 0;
+  overflow: scroll;
+  min-height: 100px;
 }
 
 .buttons {
@@ -141,4 +141,15 @@ svg {
 
 path {
   pointer-events: none;
+}
+
+@media (min-width: 600px) {
+  .container {
+    display: grid;
+    grid-template-rows: 3fr 7fr;
+    grid-template-columns: 7fr 4fr;
+    grid-template-areas:
+      "display history"
+      "buttons history";
+  }
 }

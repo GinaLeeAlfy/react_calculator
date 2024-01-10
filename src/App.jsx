@@ -145,10 +145,7 @@ const App = () => {
         },
       ]);
       setDisplay(`${lastNumber} ${operatorText} ${currentAnswer} =`);
-      setLastNumber("");
-      setCurrentAnswer(total);
-      setIsOperatorSet(false);
-      setOperator("");
+      setLastNumber(total);
     }
 
     setCurrentAnswerDisplay(total);

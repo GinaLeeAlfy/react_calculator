@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { useState } from "react";
 import Screen from "./Screen";
+import History from "./History";
 import {
   IconBackspace,
   IconDivide,
@@ -12,6 +13,8 @@ import {
   IconCe,
 } from "@tabler/icons-react";
 
+let nextID = 0;
+
 const App = () => {
   const [display, setDisplay] = useState("");
   const [currentAnswerDisplay, setCurrentAnswerDisplay] = useState("0");
@@ -19,6 +22,7 @@ const App = () => {
   const [lastNumber, setLastNumber] = useState("");
   const [operator, setOperator] = useState("");
   const [operatorDisplay, setOperatorDisplay] = useState("");
+  const [expressions, setExpressions] = useState([]);
 
   const [isFinalEval, setIsFinalEval] = useState(false);
   const [isClearNeeded, setIsClearNeeded] = useState(false);
@@ -120,10 +124,26 @@ const App = () => {
       setCurrentAnswer("0");
       setIsClearNeeded(true);
     } else if (!isFinal) {
+      setExpressions([
+        ...expressions,
+        {
+          id: nextID++,
+          expression: `${lastNumber} ${operatorText} ${currentAnswer} =`,
+          answer: total,
+        },
+      ]);
       setLastNumber(total);
       setDisplay(`${total} ${operatorText}`);
       setCurrentAnswer(total);
     } else {
+      setExpressions([
+        ...expressions,
+        {
+          id: nextID++,
+          expression: `${lastNumber} ${operatorText} ${currentAnswer} =`,
+          answer: total,
+        },
+      ]);
       setDisplay(`${lastNumber} ${operatorText} ${currentAnswer} =`);
       setLastNumber("");
       setCurrentAnswer(total);
@@ -176,22 +196,18 @@ const App = () => {
         switch (targetClassName) {
           case "subtract":
             setOperator(targetClassName);
-            // handleOperator("&minus;");
             handleOperator("-");
             break;
           case "add":
             setOperator(targetClassName);
-            // handleOperator("&plus;");
             handleOperator("+");
             break;
           case "divide":
             setOperator(targetClassName);
-            // handleOperator("&divide;");
             handleOperator("÷");
             break;
           case "multiply":
             setOperator(targetClassName);
-            // handleOperator("&times;");
             handleOperator("x");
             break;
           case "back":
@@ -281,6 +297,7 @@ const App = () => {
           </button>
         </div>
       </div>
+      <History expressions={expressions} setExpressions={setExpressions} />
     </div>
   );
 };

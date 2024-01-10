@@ -82,6 +82,10 @@ const App = () => {
       setIsCalculated(false);
     } else if (!isCalculated && isLastInputNumber) {
       calculateExpression(operatorText, false);
+    } else if (isFinalEval) {
+      setLastNumber(currentAnswerDisplay);
+      setCurrentAnswer(currentAnswerDisplay);
+      setDisplay(`${currentAnswerDisplay} ${operatorText}`);
     } else if (isCalculated) {
       setDisplay(`${lastNumber} ${operatorText}`);
       setIsCalculated(false);
@@ -246,54 +250,57 @@ const App = () => {
 
   return (
     <div className="container">
-      <Screen display={display} currentAnswerDisplay={currentAnswerDisplay} />
-      <div className="buttons" onClick={grabInfo}>
-        <div className="row">
-          <button className="clear-entry">
-            <IconCe />
-          </button>
-          <button className="clear">
-            <IconLetterC />
-          </button>
-          <button className="back">
-            <IconBackspace />
-          </button>
-          <button className="divide">
-            <IconDivide />
-          </button>
-        </div>
-        <div className="row">
-          <button>7</button>
-          <button>8</button>
-          <button>9</button>
-          <button className="multiply">
-            <IconX />
-          </button>
-        </div>
-        <div className="row">
-          <button>4</button>
-          <button>5</button>
-          <button>6</button>
-          <button className="subtract">
-            <IconMinus />
-          </button>
-        </div>
-        <div className="row">
-          <button>1</button>
-          <button>2</button>
-          <button>3</button>
-          <button className="add">
-            <IconPlus />
-          </button>
-        </div>
-        <div className="row">
-          <button>0</button>
-          <button>.</button>
-          <button className="equals">
-            <IconEqual />
-          </button>
+      <div className="calc-container">
+        <Screen display={display} currentAnswerDisplay={currentAnswerDisplay} />
+        <div className="buttons" onClick={grabInfo}>
+          <div className="row">
+            <button className="clear-entry">
+              <IconCe />
+            </button>
+            <button className="clear">
+              <IconLetterC />
+            </button>
+            <button className="back">
+              <IconBackspace />
+            </button>
+            <button className="divide">
+              <IconDivide />
+            </button>
+          </div>
+          <div className="row">
+            <button>7</button>
+            <button>8</button>
+            <button>9</button>
+            <button className="multiply">
+              <IconX />
+            </button>
+          </div>
+          <div className="row">
+            <button>4</button>
+            <button>5</button>
+            <button>6</button>
+            <button className="subtract">
+              <IconMinus />
+            </button>
+          </div>
+          <div className="row">
+            <button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button className="add">
+              <IconPlus />
+            </button>
+          </div>
+          <div className="row">
+            <button>0</button>
+            <button>.</button>
+            <button className="equals">
+              <IconEqual />
+            </button>
+          </div>
         </div>
       </div>
+
       <History expressions={expressions} setExpressions={setExpressions} />
     </div>
   );

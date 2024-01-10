@@ -173,12 +173,6 @@ const App = () => {
     setIsCalculated(true);
   };
 
-  //key listener
-  document.addEventListener("keydown", (e) => {
-    const key = e.key;
-    console.log(key);
-  });
-
   //button listener
   const grabInfo = (e) => {
     if (isClearNeeded) {

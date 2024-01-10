@@ -252,6 +252,7 @@ const App = () => {
     <div className="container">
       <div className="calc-container">
         <Screen display={display} currentAnswerDisplay={currentAnswerDisplay} />
+        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
         <div className="buttons" onClick={grabInfo}>
           <div className="row">
             <button className="clear-entry">

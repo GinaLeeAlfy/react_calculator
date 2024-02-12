@@ -9,7 +9,7 @@ This was my first attempt at making a React project without following a tutorial
 
 ![image](https://github.com/GinaLeeAlfy/BasicCalculator/assets/19276818/175d610a-5259-4ff6-8882-d6fbc387c757)
 
-## My [third calculator](https://icodethis.com/submissions/40893) from the iCodethis projects.
+## My [third calculator](https://icodethis.com/submissions/40893) in my iCodethis projects.
 I based this one off my andriod calculator.
 
 ![image](https://github.com/GinaLeeAlfy/BasicCalculator/assets/19276818/3e77cdc3-6a41-4b32-a559-d65a992d542c)
